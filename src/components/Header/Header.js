@@ -5,6 +5,7 @@ import { BiUser } from 'react-icons/bi';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import { signOut } from 'firebase/auth';
+import logo from '../../assests/logo.png'
 
 const Header = () => {
     const user = useAuthState(auth)
@@ -13,12 +14,12 @@ const Header = () => {
     }
     const manuItems = <>
         <li><Link to='/'>Men</Link></li>
-        <li><Link to='/tools'>Woman</Link></li>
-        <li><Link to='/portfolio'>Kids</Link></li>
+        <li><Link to='/'>Woman</Link></li>
+        <li><Link to='/'>Kids</Link></li>
     </>
     const userItems = <>
-        <li><Link to='/portfolio'><BsSearch></BsSearch></Link></li>
-        <li><Link to='/portfolio'><BsCart3 /></Link></li>
+        <li><Link to='/'><BsSearch></BsSearch></Link></li>
+        <li><Link to='/'><BsCart3 /></Link></li>
         {user && <div class="dropdown dropdown-end">
             <label tabindex="0" class="btn btn-ghost rounded-btn"><BiUser /></label>
             <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
@@ -41,12 +42,13 @@ const Header = () => {
 
                     </ul>
                 </div>
-                <Link to='/' className="btn btn-ghost normal-case text-xl"><span className=''>E</span>-Shop</Link>
+                <span><img src={logo} alt="" /></span>
+                <Link to='/' className="btn btn-ghost normal-case text-xl"> <span className='text-orange-400'>E-</span>Shop</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal p-0 w-full">
                     {manuItems}
-                    <div className='flex justify-end'>{userItems}</div>
+                    <div className='flex ml-60'>{userItems}</div>
                 </ul>
             </div>
             <div className="navbar-end lg:hidden">
