@@ -2,24 +2,30 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BsCart3, BsSearch } from 'react-icons/bs';
 import { BiUser } from 'react-icons/bi';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
+import { signOut } from 'firebase/auth';
 
 const Header = () => {
-
-
+    const user = useAuthState(auth)
+    const handleSignOut = () => {
+        signOut(auth)
+    }
     const manuItems = <>
         <li><Link to='/'>Men</Link></li>
         <li><Link to='/tools'>Woman</Link></li>
         <li><Link to='/portfolio'>Kids</Link></li>
-
-        {/* {
-        user && <li><Link to='/dashboard'>Dashboard</Link></li>
-    }
-    <li>{user ? <button onClick={logout} className="btn btn-ghost">Sign Out</button> : <Link to='/login'>Login</Link>}</li> */}
     </>
     const userItems = <>
         <li><Link to='/portfolio'><BsSearch></BsSearch></Link></li>
         <li><Link to='/portfolio'><BsCart3 /></Link></li>
-        <li><Link to='/portfolio'><BiUser /></Link></li>
+        {user && <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost rounded-btn"><BiUser /></label>
+            <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
+                <li><a>{user[0]?.displayName}</a></li>
+                {user && <li><button onClick={handleSignOut}>Sign Out</button></li>}
+            </ul>
+        </div>}
     </>
 
     return (
@@ -32,6 +38,7 @@ const Header = () => {
                     <ul tabIndex="0" className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                         {manuItems}
                         <div className='flex'>{userItems}</div>
+
                     </ul>
                 </div>
                 <Link to='/' className="btn btn-ghost normal-case text-xl"><span className=''>E</span>-Shop</Link>

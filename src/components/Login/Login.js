@@ -2,17 +2,34 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import auth from '../../firebase.init';
+import Loading from '../Shared/Loading';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [signInWithEmailAndPassword, user, loading, error,] = useSignInWithEmailAndPassword(auth);
     const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+    const navigate = useNavigate()
+    const location = useLocation()
+    let from = location.state?.from?.pathname || "/";
+
+    if (loading || googleLoading) {
+        return <Loading />
+    }
 
     const onSubmit = data => {
         signInWithEmailAndPassword(data.email, data.password)
     };
 
+    if (user || googleUser) {
+        navigate(from, { replace: true });
+    }
+
     let signInError
+
+    if (error || googleError) {
+        signInError = <p className='text-red-500'><small>{error?.message || googleError?.message}</small></p>
+    }
     return (
         <div className='flex justify-center items-center h-screen'>
             <div className="card w-96 bg-base-100 shadow-xl">
